@@ -1,13 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signinuser() {
+  void signinuser() async {
     print("Sign In tapped");
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+    ;
   }
 
   void googlesignin() {
@@ -49,8 +63,8 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 32),
 
               TextField(
-                controller: usernameController,
-                decoration: InputDecoration(labelText: "Username"),
+                controller: emailController,
+                decoration: InputDecoration(labelText: "Email"),
               ),
 
               const SizedBox(height: 16),
