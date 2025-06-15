@@ -1,18 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  LoginPage({super.key, required this.onTap});
+  RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
+class _RegisterPageState extends State<RegisterPage>
     with SingleTickerProviderStateMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmpasswordController = TextEditingController();
 
   String errorMessage = '';
   bool showError = false;
@@ -28,13 +30,13 @@ class _LoginPageState extends State<LoginPage>
       vsync: this,
     );
 
-    _offsetAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0, end: -10), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: -10, end: 10), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 10, end: -10), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: -10, end: 10), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 10, end: 0), weight: 1),
-    ]).animate(CurvedAnimation(parent: _shakeController, curve: Curves.linear));
+    _offsetAnimation = TweenSequence([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: -10.0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -10.0, end: 10.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 10.0, end: -10.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: -10.0, end: 10.0), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 10.0, end: 0.0), weight: 1),
+    ]).animate(_shakeController);
   }
 
   @override
@@ -52,15 +54,19 @@ class _LoginPageState extends State<LoginPage>
     _shakeController.forward(from: 0);
   }
 
-  void signinuser() async {
+  void signupuser() async {
     setState(() {
-      errorMessage = '';
       showError = false;
     });
+
+    if (confirmpasswordController.text != passwordController.text) {
+      triggerError("Passwords don't match.");
+      return;
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,
-
       builder: (context) => const Center(
         child: SizedBox(
           width: 160,
@@ -74,20 +80,14 @@ class _LoginPageState extends State<LoginPage>
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'user-not-found') {
-        triggerError("No user found with that email.");
-      } else if (e.code == 'wrong-password') {
-        triggerError("Wrong password, bro.");
-      } else {
-        triggerError("Authentication failed.");
-      }
+      triggerError(e.message ?? "Registration failed.");
     }
   }
 
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage>
               ),
               const SizedBox(height: 24),
               Text(
-                "Welcome back!",
+                "Make it official.",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -125,27 +125,43 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
               const SizedBox(height: 32),
+
               TextField(
                 controller: emailController,
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(labelText: "Email"),
               ),
               const SizedBox(height: 16),
+
               TextField(
                 controller: passwordController,
-                obscureText: true,
                 textInputAction: TextInputAction.next,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: "Password"),
               ),
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: confirmpasswordController,
+                textInputAction: TextInputAction.done,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Confirm Password",
+                ),
+              ),
+
               const SizedBox(height: 32),
+
               ElevatedButton(
-                onPressed: signinuser,
+                onPressed: signupuser,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                 ),
-                child: const Text("SIGN IN"),
+                child: const Text("SIGN UP"),
               ),
+
               const SizedBox(height: 16),
+
               if (showError)
                 AnimatedBuilder(
                   animation: _offsetAnimation,
@@ -164,7 +180,8 @@ class _LoginPageState extends State<LoginPage>
                   },
                 ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
+
               Row(
                 children: [
                   const Expanded(child: Divider(thickness: 1)),
@@ -182,6 +199,7 @@ class _LoginPageState extends State<LoginPage>
                 ],
               ),
               const SizedBox(height: 24),
+
               Center(
                 child: GestureDetector(
                   onTap: googlesignin,
@@ -201,17 +219,22 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+
+              const SizedBox(height: 30),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Not a member? ", style: TextStyle(color: textColor)),
+                  Text(
+                    "Already have an account? ",
+                    style: TextStyle(color: textColor),
+                  ),
                   GestureDetector(
                     onTap: () {
                       widget.onTap?.call();
                     },
                     child: const Text(
-                      "Register now",
+                      "Login now",
                       style: TextStyle(
                         color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
@@ -220,6 +243,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ],
               ),
+
               const SizedBox(height: 20),
             ],
           ),
