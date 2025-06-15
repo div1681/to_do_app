@@ -2,136 +2,139 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
+
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void signinuser() {}
-  void googlesignin() {}
+  void signinuser() {
+    print("Sign In tapped");
+  }
+
+  void googlesignin() {
+    print("Google Sign In tapped");
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyMedium?.color;
+
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: //
-      SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 0),
-                Icon(Icons.lock, size: 75),
-                SizedBox(height: 40),
-                Text('Welcome back!'),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: TextField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "TODO.",
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+                  color: textColor,
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              Text(
+                "Welcome back!",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              TextField(
+                controller: usernameController,
+                decoration: InputDecoration(labelText: "Username"),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(labelText: "Password"),
+              ),
+
+              const SizedBox(height: 32),
+
+              ElevatedButton(
+                onPressed: signinuser,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 56),
+                ),
+                child: const Text("SIGN IN"),
+              ),
+
+              const SizedBox(height: 32),
+
+              Row(
+                children: [
+                  const Expanded(child: Divider(thickness: 1)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Text(
+                      "OR CONTINUE WITH",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[400]!),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Username',
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[400]!),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Password',
-                    ),
-                  ),
-                ),
+                  const Expanded(child: Divider(thickness: 1)),
+                ],
+              ),
 
-                SizedBox(height: 50),
+              const SizedBox(height: 24),
 
-                GestureDetector(
-                  onTap: () => signinuser(),
+              Center(
+                child: GestureDetector(
+                  onTap: googlesignin,
                   child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(20),
-                    margin: EdgeInsets.symmetric(horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "SIGN IN",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 50),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    children: [
-                      Expanded(child: Divider(thickness: 0.5)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text('Or continue with'),
-                      ),
-                      Expanded(child: Divider(thickness: 0.5)),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 40),
-                GestureDetector(
-                  onTap: () => googlesignin(),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.white),
+                      border: Border.all(
+                        color: textColor ?? Colors.grey,
+                        width: 2,
+                      ),
                     ),
                     child: Image.asset(
                       'assets/images/google_logo.png',
-                      height: 36,
+                      height: 32,
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Not a member? '),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Registed now',
+              ),
+
+              const SizedBox(height: 40),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Not a member? ", style: TextStyle(color: textColor)),
+                  GestureDetector(
+                    onTap: () {
+                      print("Navigate to register");
+                    },
+                    child: const Text(
+                      "Register now",
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
