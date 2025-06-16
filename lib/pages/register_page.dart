@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:to_do_app/utilities/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -89,10 +90,6 @@ class _RegisterPageState extends State<RegisterPage>
       Navigator.pop(context);
       triggerError(e.message ?? "Registration failed.");
     }
-  }
-
-  void googlesignin() {
-    print("Google Sign In tapped");
   }
 
   @override
@@ -202,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage>
 
               Center(
                 child: GestureDetector(
-                  onTap: googlesignin,
+                  onTap: () => signInWithGoogle(),
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(

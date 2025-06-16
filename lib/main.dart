@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/firebase_options.dart';
 import 'package:to_do_app/pages/auth_page.dart';
 import 'package:to_do_app/pages/login_page.dart';
+import 'package:to_do_app/pages/lol.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TODO',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.black,

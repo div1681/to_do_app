@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:to_do_app/utilities/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -91,10 +92,6 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void googlesignin() {
-    print("Google Sign In tapped");
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -184,7 +181,7 @@ class _LoginPageState extends State<LoginPage>
               const SizedBox(height: 24),
               Center(
                 child: GestureDetector(
-                  onTap: googlesignin,
+                  onTap: () => signInWithGoogle(),
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
